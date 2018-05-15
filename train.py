@@ -38,6 +38,7 @@ def main():
 	ds = EventsDataset('events-array-1.txt')
 	sampler = torch.utils.data.sampler.RandomSampler(ds)
 	trainloader = torch.utils.data.DataLoader(ds, batch_size=BATCH_SIZE, sampler = sampler)
+	model = MultiAttrEncoder(9,9,256, CUDA)	
 	if CUDA:
 		model = model.cuda()
 	optimizer = optim.SGD(model.parameters(), lr=0.0006, momentum=0.9)
@@ -56,5 +57,6 @@ def main():
 			optimizer.step()
 			if i > 0 and not i % PRINT_EVERY:
 				print('[{}] Loss: {}'.format(i,loss))
+				torch.save(model.state_dict(),'seqpred.model')
 if __name__=='__main__':
 	main()
